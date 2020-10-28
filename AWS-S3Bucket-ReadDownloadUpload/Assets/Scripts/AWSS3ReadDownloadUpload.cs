@@ -62,4 +62,21 @@ public class AWSS3ReadDownloadUpload : MonoBehaviour
         //Download file and save to resources folder
         assetResponse.WriteResponseStreamToFile(Application.dataPath + "/Resources/" + key);
     }
+
+    public void UploadToS3()
+    {
+        //Send request
+        PutObjectRequest putRequest = new PutObjectRequest
+        {
+            BucketName = awsConfig.AWSS3BucketName,
+            Key = key,
+
+            //file path is hard coded, would be better to add some sort of
+            //file browser
+            FilePath = Application.dataPath + "/Resources/" + key
+        };
+
+        //Get response from S3
+        PutObjectResponse response = client.PutObject(putRequest);
+    }
 }

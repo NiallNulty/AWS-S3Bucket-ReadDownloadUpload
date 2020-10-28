@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AWSKey: 
   AWSSecretKey: 
-  AWSS3BucketName: 
+  AWSS3BucketName: niallnultytestbucket
