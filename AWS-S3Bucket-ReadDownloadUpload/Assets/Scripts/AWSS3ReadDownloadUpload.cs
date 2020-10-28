@@ -18,19 +18,24 @@ public class AWSS3ReadDownloadUpload : MonoBehaviour
     //Client for accessing S3 files
     private AmazonS3Client client = new AmazonS3Client(Amazon.RegionEndpoint.EUWest1);
 
+    //this is the name of the file
+    //in a real life scenario should read string from an input instead 
+    //of fixed string
+    private string key = "TestFile.txt";
+
     public void ReadFromS3()
     {
-        //Semd request
-        GetObjectRequest assetRequest = new GetObjectRequest();
+        //Send request
+        GetObjectRequest request = new GetObjectRequest();
 
         //Get bucket name from config
-        assetRequest.BucketName = awsConfig.AWSS3BucketName;
+        request.BucketName = awsConfig.AWSS3BucketName;
 
         //The files key, its usually the file name
-        assetRequest.Key = "TestFile.txt";
+        request.Key = key;
 
         //Get response from S3
-        GetObjectResponse response = client.GetObject(assetRequest);
+        GetObjectResponse response = client.GetObject(request);
 
         //Using streamreader to rest string from txt file
         StreamReader reader = new StreamReader(response.ResponseStream);
@@ -38,5 +43,23 @@ public class AWSS3ReadDownloadUpload : MonoBehaviour
 
         //Populate input field
         inputField.text = content;
+    }
+
+    public void DownloadFromS3()
+    {
+        //Send request
+        GetObjectRequest request = new GetObjectRequest();
+
+        //Get bucket name from config
+        request.BucketName = awsConfig.AWSS3BucketName;
+
+        //The files key, its usually the file name
+        request.Key = key;
+
+        //Get response from S3
+        GetObjectResponse assetResponse = client.GetObject(request);
+
+        //Download file and save to resources folder
+        assetResponse.WriteResponseStreamToFile(Application.dataPath + "/Resources/" + key);
     }
 }
